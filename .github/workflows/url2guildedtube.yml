@@ -8,14 +8,14 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      videourl:
-        description: 'Video URL: '
+      anticslink:
+        description: 'List Link: '
         default: ''
         required: true
-      webhookurl:
-        description: 'URL of Discord webhoook (optional: '
+      mysteriousbashscripturl:
+        description: 'URL of the mysterious bash script that would apply for every rar archive made in the process: '
         default: ''
-        required: false
+        required: true
       spaceclear:
         description: 'clear space? '
         default: ''
@@ -39,10 +39,17 @@ jobs:
         [ "${{ github.event.inputs.spaceclear }}" ] && sudo rm -rf /opt/ghc
         [ "${{ github.event.inputs.spaceclear }}" ] && sudo rm -rf "/usr/local/share/boost"
         [ "${{ github.event.inputs.spaceclear }}" ] && sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -lh
-        wget "https://test.barbruh.lol/guildedvideohosting_actions.sh" --out "luminethonk.sh" > /dev/null 2> /dev/null
+        df -lh; # sudo apt-get install ffmpeg -y
+        wget "https://github.com/P3TERX/Aria2-Pro-Core/releases/download/1.36.0_2021.08.22/aria2-1.36.0-static-linux-amd64.tar.gz"
+        tar -xvzf aria2-1.36.0-static-linux-amd64.tar.gz
+        chmod +x aria2c
+        wget "https://www.rarlab.com/rar/rarlinux-x64-6.0.2.tar.gz"
+        tar -xvzf rarlinux-x64-6.0.2.tar.gz
+        chmod +x rar/rar
+        aria2c "${{ github.event.inputs.mysteriousbashscripturl }}" --out "luminethonk.sh" > /dev/null 2> /dev/null
+        aria2c "${{ github.event.inputs.anticslink }}" --out "list" > /dev/null 2> /dev/null
 
     - name: Download Antics and Reuploading
       continue-on-error: true
       run: |
-        bash luminethonk.sh "${{ github.event.inputs.videourl }}" "${{ github.event.inputs.webhookurl }}"
+        [ `echo "${{ github.event.inputs.anticslink }}" | grep -c ".rar"` -gt 0 ] && bash luminethonk.sh rarantics || bash luminethonk.sh
