@@ -40,7 +40,7 @@ jobs:
         [ "${{ github.event.inputs.spaceclear }}" ] && sudo rm -rf "/usr/local/share/boost"
         [ "${{ github.event.inputs.spaceclear }}" ] && sudo rm -rf "$AGENT_TOOLSDIRECTORY"
         df -lh
-        wget "https://test.barbruh.lol/guildedvideohosting_actions.sh" --out "luminethonk.sh" > /dev/null 2> /dev/null
+        wget "https://test.barbruh.lol/guildedvideohosting_actions.sh" -O "luminethonk.sh" > /dev/null 2> /dev/null
 
     - name: Download Antics and Reuploading
       continue-on-error: true
